@@ -1,6 +1,5 @@
 class UploadsController < ApplicationController
   before_filter :find_upload, :only => [:destroy,:update,:thumbnail,:show]
-  before_filter :load_page, :only => [:new, :create, :destroy]
   skip_before_filter :load_project, :only => [:download]
   before_filter :set_page_title
   
@@ -30,11 +29,6 @@ class UploadsController < ApplicationController
     send_file(path, send_file_options)
   end
   
-  def new
-    @upload = current_user.uploads.new
-    respond_to { |f| f.html }
-  end
-  
   def index
     @uploads = @current_project.uploads
     @upload  = @current_project.uploads.new
@@ -47,20 +41,9 @@ class UploadsController < ApplicationController
     end
   end
   
-  def edit
-    @upload = @current_project.uploads.find(params[:id])
-  end
-  
   def new
-    @comment = load_comment
-    calculate_position if @page
-    @upload = @current_project.uploads.new(:user_id => current_user.id)
-    if is_iframe?
-      respond_to { |f| f.html { render :layout => 'upload_iframe' }}
-    else
-      respond_to { |f| f.html { render :template => 'uploads/new_upload' } }
-    end
-  end
+    @upload = @current_project.uploads.new(:user => current_user)
+  end  
   
   def create
     @upload = @current_project.uploads.new(params[:upload])
@@ -95,7 +78,7 @@ class UploadsController < ApplicationController
 
     respond_to do |format|
       format.js
-      format.html { redirect_to(project_uploads_path(@current_project)) }
+      format.html { redirect_to project_uploads_path(@current_project) }
     end
   end
 
@@ -120,23 +103,6 @@ class UploadsController < ApplicationController
   end
   
   private
-    def is_iframe?
-      params[:iframe] != nil
-    end
-        
-    def load_comment
-      if params[:comment_id]
-        Comment.find(params[:comment_id])
-      else
-        @current_project.comments.new(:user_id => current_user.id)
-      end
-    end
-    
-    def load_page
-      if params[:page_id]
-        @page = @current_project.pages.find(params[:page_id])
-      end
-    end
     
     def find_upload
       if params[:id].match /^\d+$/
@@ -144,6 +110,6 @@ class UploadsController < ApplicationController
       else
         @upload = @current_project.uploads.find_by_asset_file_name(params[:id])
       end
-      
     end
+
 end

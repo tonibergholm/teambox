@@ -59,10 +59,9 @@ var Page = {
   SLOT_GAP: 36,
   READONLY: false,
 
-  init: function(readonly, url, auth) {
+  init: function(readonly, url) {
     this.READONLY = readonly;
     this.url = url;
-    this.auth = auth;
     document.currentPage = this;
     if (!readonly) {
       InsertionMarker.init();
@@ -79,12 +78,18 @@ var Page = {
 
     Sortable.create('slots', {handle: 'slot_handle', tag: 'div', only: 'pageSlot',
       onUpdate: function() {
-        new Ajax.Request(Page.url + '/reorder',
-        {
-          asynchronous:true, evalScripts:true,
-          onComplete:function(request) {},
-          parameters:Sortable.serialize('slots', {name: 'slots'}) + '&authenticity_token=' + Page.auth
-        });
+        var csrf_param = $$('meta[name=csrf-param]').first(),
+            csrf_token = $$('meta[name=csrf-token]').first(),
+            serialized = Sortable.serialize('slots', {name: 'slots'});
+        
+        if (csrf_param) {
+          var param = csrf_param.readAttribute('content'),
+              token = csrf_token.readAttribute('content')
+          
+          serialized += '&' + param + '=' + token
+        }
+
+        new Ajax.Request(Page.url + '/reorder', { parameters: serialized });
       } 
     });
   },
@@ -347,6 +352,13 @@ var InsertionMarkerFunc = function(evt){
     InsertionMarker.hide(); // *poof*
   }
 }
+
+document.on('dom:loaded', function() {
+  if ($$('body.show_pages').first()) {
+    Page.init(false, window.location.pathname);
+    Page.makeSortable();
+  }
+})
 
 // Buttons
 

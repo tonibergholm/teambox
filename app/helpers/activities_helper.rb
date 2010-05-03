@@ -46,9 +46,13 @@ module ActivitiesHelper
     values = mobile ? { :user => (plain ? activity.user.short_name : "<span class='user'>#{activity.user.short_name}</span>") } :
                       { :user => link_to_unless(plain, activity.user.name, activity.user) }
     
-    if Comment === activity
+    case activity
+    when Comment
       object = activity
       type = 'create_comment'
+    when Upload
+      object = activity
+      type = 'create_upload'
     else
       object = activity.target
       type = activity.action_type
