@@ -15,6 +15,8 @@ Teambox::Initializer.run do |config|
     SprocketsApplication.use_page_caching = !config.heroku?
     ActiveSupport::XmlMini.backend = 'LibXML'
   end
+  
+  config.i18n.load_path << Dir[File.join(RAILS_ROOT, 'config', 'locales', 'rails', '*.{rb,yml}')]
 end
 
 # set default locale (Eglish) to be a fallback for missing translations
