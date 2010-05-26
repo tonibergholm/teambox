@@ -192,7 +192,7 @@ specs:
 - nokogiri: 
     version: 1.4.2
 - rack-test: 
-    version: 0.5.3
+    version: 0.5.4
 - ffi: 
     version: 0.6.3
 - json_pure: 
@@ -282,11 +282,11 @@ specs:
 - tmail: 
     version: 1.2.7.1
 - will_paginate: 
-    version: 2.3.12
+    version: 2.3.14
 - ya2yaml: 
     version: 0.29.2
 - tolk: 
-    version: 0.0.1
+    version: 0.2.0
     source: 0
 - tzinfo: 
     version: 0.3.20
@@ -299,6 +299,6 @@ sources:
 - Git: 
     uri: git://github.com/mislav/tolk.git
     git: git://github.com/mislav/tolk.git
-    ref: a468b381fdf83d612598937316db0befb203bb59
+    ref: 0d4c9b332cbfefbf89d23f0dc8d92b07f4540260
 - Rubygems: 
     uri: http://gemcutter.org
