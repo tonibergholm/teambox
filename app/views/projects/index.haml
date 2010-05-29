@@ -6,9 +6,6 @@
       = list_pending_invites(@pending_projects)
 
   - if @activities.any? or @projects.any?
-    %h2
-      = t('.title')
-      %span= t('.refreshes')
     #activities
       = list_threads(@threads)
       = #list_activities(@activities)
