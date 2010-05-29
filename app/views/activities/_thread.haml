@@ -1,0 +1,5 @@
+- case thread.thread_parent
+  - when Task
+    = render :partial => 'tasks/threaded', :locals => { :task => thread.thread_parent }
+  - else
+    = show_activity(thread)

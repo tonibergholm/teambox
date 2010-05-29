@@ -24,7 +24,7 @@ class Activity < ActiveRecord::Base
       :action => action,
       :user_id => creator_id,
       :created_at => target.created_at,
-      :comment_type => comment_type)      
+      :comment_type => comment_type)
     activity.save
     
     activity
@@ -82,6 +82,24 @@ class Activity < ActiveRecord::Base
     User.find_with_deleted(user_id)
   end
 
+  def thread_id
+    @thread_id ||= if target_type == "Comment" and !target.target.is_a?(Project)
+      "#{target.target_type}_#{target.target_id}"
+    else
+      "#{target_type}_#{target_id}"
+    end
+  end
+
+  # Could be refactored by having a thread_parent method in each model,
+  # pointing to the parent or to self if it is the parent.
+  def thread_parent
+    @thread_parent ||= if target_type == "Comment" and !target.target.is_a?(Project)
+      target.target
+    else
+      target
+    end
+  end
+
   def to_xml(options = {})
     options[:indent] ||= 2
     xml = options[:builder] ||= Builder::XmlMarkup.new(:indent => options[:indent])
@@ -103,6 +121,8 @@ class Activity < ActiveRecord::Base
         xml.tag! 'name',       project.name
         xml.tag! 'permalink',  project.permalink
       end
+
+      xml.tag! 'thread-id', thread_id
 
       xml.target :id => target.id do
         xml.tag! 'type', target.class

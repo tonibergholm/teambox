@@ -13,7 +13,7 @@ class ProjectsController < ApplicationController
     @archived_projects = @current_user.projects.archived
 
     respond_to do |f|
-      f.html
+      f.html  { sort_by_threads }
       f.m
       f.rss   { render :layout  => false }
       f.xml   { render :xml     => @projects.to_xml }
@@ -165,6 +165,19 @@ class ProjectsController < ApplicationController
         @sub_action = 'all'
         @projects = current_user.projects.unarchived
       end
+    end
+
+    # Get unique threads from activities. The thread will be:
+    # - The Conversation or Task if the activity is related to it
+    # - The Activity object otherwise
+    def sort_by_threads
+      @threads = @activities.inject({:ids => [], :threads => []}) do |result, a|
+        unless result[:ids].include?(a.thread_id)
+          result[:ids] << a.thread_id
+          result[:threads] << a
+        end
+        result
+      end[:threads]
     end
 
 end

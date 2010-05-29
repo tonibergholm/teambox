@@ -20,6 +20,10 @@ module ActivitiesHelper
     end
   end
 
+  def list_threads(threads)
+    render :partial => 'activities/thread', :collection => threads
+  end
+
   # TODO for activities create_note, create_divider, edit and delete
   ActivityTypes = %w( create_comment 
                       create_conversation

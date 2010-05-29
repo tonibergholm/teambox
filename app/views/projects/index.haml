@@ -10,8 +10,8 @@
       = t('.title')
       %span= t('.refreshes')
     #activities
-      = render :partial => 'tasks/threaded', :locals => { :task => Task.find(8) }          
-      = list_activities(@activities)
+      = list_threads(@threads)
+      = #list_activities(@activities)
       = show_more_button(@activities)
     = javascript_tag autorefresh(@activities)
   - else
