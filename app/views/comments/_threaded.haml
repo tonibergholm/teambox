@@ -1,0 +1,33 @@
+.comment{:id => "comment_#{comment.id}", :immutable_at => datetime_ms(comment.created_at + 15.minutes) }
+  .info
+    = micro_avatar(comment.user)
+  .block
+    - unless rss?
+      .actions_menu
+        %span.actiondate= posted_date comment.created_at
+        %span.loading{:style => 'display:none'}= "Loading..."
+        - if comment.can_modify?(current_user, false)
+          = image_tag('triangle.png', :class => 'triangle')
+          .extra
+            - if comment.target.class == Project
+              = convert_comment_link(comment)
+            - if comment.can_edit?(current_user)
+              = edit_comment_link(comment)
+            .tactione{:style => (comment.can_edit?(current_user) ? 'display:none' : nil)}
+              = t('.cannot_edit')
+            - if comment.can_destroy?(current_user)
+              = delete_comment_link(comment)
+    .name
+      = user_link(comment.user)
+      - if comment.target_type == 'Task'
+        = comment_task_status(comment)
+    .body.textilized
+      ~ comment.body_html
+    - if comment.uploads.any?
+      - if comment.uploads.all? { |upload| upload.image? }
+        .upload_images
+          = list_uploads_inline_with_thumbnails(comment.uploads)
+      - else
+        .upload_list
+          = list_uploads_inline(comment.uploads)
+  .clear
