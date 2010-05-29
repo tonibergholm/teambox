@@ -145,15 +145,15 @@ module ActivitiesHelper
   end
   
   def link_to_conversation(conversation)
-    link_to conversation, project_conversation_path(conversation.project, conversation)
+    link_to conversation, project_conversation_path(conversation.project, conversation), :class => 'link_conversation'
   end
   
   def link_to_task_list(task_list)
-    link_to task_list, project_task_list_path(task_list.project, task_list)
+    link_to task_list, project_task_list_path(task_list.project, task_list), :class => 'link_task_list'
   end
 
   def link_to_task(task)
-    link_to task, project_task_list_task_path(task.project, task.task_list,task)
+    link_to task, project_task_list_task_path(task.project, task.task_list,task), :class => 'link_task'
   end
 
   def activities_paginate_link(*args)
