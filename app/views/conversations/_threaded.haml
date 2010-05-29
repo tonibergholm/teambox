@@ -1,0 +1,17 @@
+.thread{ :id => "thread_conversation_#{conversation.id}" }
+  .title
+    - project = conversation.project
+    .conversation{ :id => conversation_id(:conversation,project,conversation) }
+      %strong
+        Conversation:
+      = link_to conversation, project_conversation_path(project,conversation), :class => 'name'
+      %span.project
+        in
+        = link_to project, project_path(project)
+
+  .comments
+    - for comment in conversation.comments.reverse
+      = render :partial => 'comments/threaded', :locals => { :comment => comment }
+
+  .link
+    = link_to "Go to the conversation '#{conversation}'...", project_conversation_path(project,conversation)

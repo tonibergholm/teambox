@@ -1,4 +1,6 @@
 - case thread.thread_parent
+  - when Conversation
+    = render :partial => 'conversations/threaded', :locals => { :conversation => thread.thread_parent }
   - when Task
     = render :partial => 'tasks/threaded', :locals => { :task => thread.thread_parent }
   - else
