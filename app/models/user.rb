@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
   has_many :invitations, :foreign_key => 'invited_user_id'
   has_many :activities
   has_many :uploads
+  has_many :hooks, :dependent => :destroy
   has_one :group
   has_and_belongs_to_many :groups
 

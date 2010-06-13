@@ -23,7 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :reset_passwords
   map.resource :session
 
-  map.hooks '/hooks/:key/:format', :controller => 'hooks', :action => 'push', :format => 'post'
+  map.hook_push '/hooks/:key/:format', :controller => 'hooks', :action => 'push', :format => 'post'
 
   map.with_options :controller => 'users', :action => 'edit' do |account|
     account.account_settings      '/account/settings',      :sub_action => 'settings'
@@ -60,6 +60,7 @@ ActionController::Routing::Routes.draw do |map|
 
     project.settings 'settings',  :controller => 'projects', :action => 'edit', :sub_action => 'settings'
     project.picture  'picture',   :controller => 'projects', :action => 'edit', :sub_action => 'picture'
+    project.resources :hooks
     project.deletion 'deletion',  :controller => 'projects', :action => 'edit', :sub_action => 'deletion'
     project.ownership 'ownership', :controller => 'projects', :action => 'edit', :sub_action => 'ownership'
 
